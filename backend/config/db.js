@@ -2,17 +2,20 @@
 const mysql = require('mysql2/promise');
 require('dotenv').config();
 
+const databaseUrl = new URL(process.env.DATABASE_URL);
+
 const db = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
+    host: databaseUrl.hostname,
+    port: Number(databaseUrl.port),
+    user: decodeURIComponent(databaseUrl.username),
+    password: decodeURIComponent(databaseUrl.password),
+    database: databaseUrl.pathname.slice(1),
+    ssl: {},
     waitForConnections: true,
-    connectionLimit: 10,
+    connectionLimit: 5,
     queueLimit: 0
 });
 
-// Handle database connection errors
 db.on('error', (error) => {
     console.error('Database Pool Error:', error.message);
 });
