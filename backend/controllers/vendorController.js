@@ -5,7 +5,7 @@ const db = require('../config/db');
 exports.getVendors = async (req, res) => {
     try {
         const [vendors] = await db.query(
-            'SELECT * FROM Vendors ORDER BY vendor_id DESC'
+            'SELECT * FROM vendors ORDER BY vendor_id DESC'
         );
 
         return res.status(200).json(vendors);
@@ -34,7 +34,7 @@ exports.addVendor = async (req, res) => {
         }
 
         const [result] = await db.query(
-            `INSERT INTO Vendors (vendor_name, phone_number, location)
+            `INSERT INTO vendors (vendor_name, phone_number, location)
              VALUES (?, ?, ?)`,
             [
                 vendor_name.trim(),
@@ -70,7 +70,7 @@ exports.searchVendors = async (req, res) => {
         const searchTerm = `%${search.trim()}%`;
 
         const [vendors] = await db.query(
-            `SELECT * FROM Vendors
+            `SELECT * FROM vendors
              WHERE vendor_name LIKE ?
              OR phone_number LIKE ?
              OR location LIKE ?`,
@@ -110,7 +110,7 @@ exports.updateVendor = async (req, res) => {
         }
 
         const [result] = await db.query(
-            `UPDATE Vendors
+            `UPDATE vendors
              SET vendor_name = ?, phone_number = ?, location = ?
              WHERE vendor_id = ?`,
             [
