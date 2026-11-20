@@ -11,8 +11,8 @@ exports.getStock = async (req, res) => {
                 f.fruit_name,
                 s.packaging_size,
                 s.available_quantity
-             FROM Stock s
-             JOIN Fruits f ON s.fruit_id = f.fruit_id
+             FROM stock s
+             JOIN fruits f ON s.fruit_id = f.fruit_id
              ORDER BY f.fruit_name, s.packaging_size`
         );
 
@@ -35,8 +35,8 @@ exports.getLowStock = async (req, res) => {
                 f.fruit_name,
                 s.packaging_size,
                 s.available_quantity
-             FROM Stock s
-             JOIN Fruits f ON s.fruit_id = f.fruit_id
+             FROM stock s
+             JOIN fruits f ON s.fruit_id = f.fruit_id
              WHERE s.available_quantity <= 10
              ORDER BY s.available_quantity ASC`
         );
