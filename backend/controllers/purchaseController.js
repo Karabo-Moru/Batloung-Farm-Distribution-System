@@ -49,7 +49,7 @@ exports.addPurchase = async (req, res) => {
 
         // Check supplier
         const [suppliers] = await connection.query(
-            'SELECT supplier_id FROM Suppliers WHERE supplier_id = ?',
+            'SELECT supplier_id FROM suppliers WHERE supplier_id = ?',
             [supplier_id]
         );
 
@@ -72,7 +72,7 @@ exports.addPurchase = async (req, res) => {
 
         // Create purchase record
         const [purchaseResult] = await connection.query(
-            `INSERT INTO Purchases
+            `INSERT INTO purchases
              (supplier_id, purchase_date, total_amount)
              VALUES (?, CURDATE(), ?)`,
             [supplier_id, totalAmount]
@@ -83,18 +83,20 @@ exports.addPurchase = async (req, res) => {
         // Record items and update stock
         for (const item of items) {
             const [fruits] = await connection.query(
-                'SELECT fruit_id FROM Fruits WHERE fruit_id = ?',
+                'SELECT fruit_id FROM fruits WHERE fruit_id = ?',
                 [item.fruit_id]
             );
 
             if (fruits.length === 0) {
-                const error = new Error(`Fruit ID ${item.fruit_id} does not exist`);
+                const error = new Error(
+                    `Fruit ID ${item.fruit_id} does not exist`
+                );
                 error.statusCode = 404;
                 throw error;
             }
 
             await connection.query(
-                `INSERT INTO PurchaseDetails
+                `INSERT INTO purchasedetails
                  (purchase_id, fruit_id, quantity, unit_cost, packaging_size)
                  VALUES (?, ?, ?, ?, ?)`,
                 [
@@ -107,7 +109,7 @@ exports.addPurchase = async (req, res) => {
             );
 
             await connection.query(
-                `INSERT INTO Stock
+                `INSERT INTO stock
                  (fruit_id, packaging_size, available_quantity)
                  VALUES (?, ?, ?)
                  ON DUPLICATE KEY UPDATE
