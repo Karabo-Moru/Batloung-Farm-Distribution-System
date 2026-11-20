@@ -5,7 +5,7 @@ const db = require('../config/db');
 exports.getSuppliers = async (req, res) => {
     try {
         const [suppliers] = await db.query(
-            'SELECT * FROM Suppliers ORDER BY supplier_id DESC'
+            'SELECT * FROM suppliers ORDER BY supplier_id DESC'
         );
 
         return res.status(200).json(suppliers);
@@ -31,7 +31,7 @@ exports.getSupplierById = async (req, res) => {
         }
 
         const [suppliers] = await db.query(
-            'SELECT * FROM Suppliers WHERE supplier_id = ?',
+            'SELECT * FROM suppliers WHERE supplier_id = ?',
             [id]
         );
 
@@ -76,7 +76,7 @@ exports.addSupplier = async (req, res) => {
         }
 
         const [result] = await db.query(
-            `INSERT INTO Suppliers
+            `INSERT INTO suppliers
             (business_name, contact_person, phone, province, address)
             VALUES (?, ?, ?, ?, ?)`,
             [
@@ -140,7 +140,7 @@ exports.updateSupplier = async (req, res) => {
         }
 
         const [result] = await db.query(
-            `UPDATE Suppliers
+            `UPDATE suppliers
             SET business_name = ?,
                 contact_person = ?,
                 phone = ?,
@@ -159,7 +159,7 @@ exports.updateSupplier = async (req, res) => {
 
         if (result.affectedRows === 0) {
             const [existing] = await db.query(
-                'SELECT supplier_id FROM Suppliers WHERE supplier_id = ?',
+                'SELECT supplier_id FROM suppliers WHERE supplier_id = ?',
                 [id]
             );
 
@@ -201,7 +201,7 @@ exports.deleteSupplier = async (req, res) => {
         }
 
         const [result] = await db.query(
-            'DELETE FROM Suppliers WHERE supplier_id = ?',
+            'DELETE FROM suppliers WHERE supplier_id = ?',
             [id]
         );
 
