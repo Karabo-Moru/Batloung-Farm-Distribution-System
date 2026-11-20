@@ -8,8 +8,8 @@ exports.getTopFruits = async (req, res) => {
             `SELECT
                 f.fruit_name,
                 SUM(sd.quantity) AS total_sold
-             FROM SalesDetails sd
-             JOIN Fruits f ON sd.fruit_id = f.fruit_id
+             FROM salesdetails sd
+             JOIN fruits f ON sd.fruit_id = f.fruit_id
              GROUP BY f.fruit_id, f.fruit_name
              ORDER BY total_sold DESC
              LIMIT 5`
@@ -51,7 +51,7 @@ exports.getRevenueReport = async (req, res) => {
             `SELECT
                 COUNT(*) AS total_sales,
                 COALESCE(SUM(total_amount), 0) AS total_revenue
-             FROM Sales
+             FROM sales
              WHERE sale_date BETWEEN ? AND ?`,
             [start_date, end_date]
         );
@@ -75,9 +75,9 @@ exports.getTopVendor = async (req, res) => {
                 v.vendor_id,
                 v.vendor_name,
                 SUM(sd.quantity) AS total_boxes
-             FROM SalesDetails sd
-             JOIN Sales s ON sd.sale_id = s.sale_id
-             JOIN Vendors v ON s.vendor_id = v.vendor_id
+             FROM salesdetails sd
+             JOIN sales s ON sd.sale_id = s.sale_id
+             JOIN vendors v ON s.vendor_id = v.vendor_id
              GROUP BY v.vendor_id, v.vendor_name
              ORDER BY total_boxes DESC
              LIMIT 1`
@@ -104,8 +104,8 @@ exports.getStockReport = async (req, res) => {
                 f.fruit_name,
                 st.packaging_size,
                 st.available_quantity
-             FROM Stock st
-             JOIN Fruits f ON st.fruit_id = f.fruit_id
+             FROM stock st
+             JOIN fruits f ON st.fruit_id = f.fruit_id
              ORDER BY f.fruit_name, st.packaging_size`
         );
 
