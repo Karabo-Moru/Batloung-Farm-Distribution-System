@@ -13,11 +13,9 @@ const db = mysql.createPool({
     ssl: {},
     waitForConnections: true,
     connectionLimit: 5,
-    queueLimit: 0
-});
-
-db.on('error', (error) => {
-    console.error('Database Pool Error:', error.message);
+    queueLimit: 0,
+    enableKeepAlive: true,
+    keepAliveInitialDelay: 0
 });
 
 module.exports = db;
