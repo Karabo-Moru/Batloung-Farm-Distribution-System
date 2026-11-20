@@ -5,7 +5,7 @@ const db = require('../config/db');
 exports.getFruits = async (req, res) => {
     try {
         const [fruits] = await db.query(
-            'SELECT * FROM Fruits ORDER BY fruit_id DESC'
+            'SELECT * FROM fruits ORDER BY fruit_id DESC'
         );
 
         return res.status(200).json(fruits);
@@ -42,7 +42,7 @@ exports.addFruit = async (req, res) => {
         transactionStarted = true;
 
         const [result] = await connection.query(
-            `INSERT INTO Fruits (fruit_name, description, status)
+            `INSERT INTO fruits (fruit_name, description, status)
              VALUES (?, ?, ?)`,
             [
                 fruit_name.trim(),
@@ -54,7 +54,7 @@ exports.addFruit = async (req, res) => {
         const fruitId = result.insertId;
 
         await connection.query(
-            `INSERT INTO Stock
+            `INSERT INTO stock
              (fruit_id, packaging_size, available_quantity)
              VALUES (?, ?, ?), (?, ?, ?), (?, ?, ?)`,
             [
@@ -118,7 +118,7 @@ exports.updateFruit = async (req, res) => {
         }
 
         const [result] = await db.query(
-            `UPDATE Fruits
+            `UPDATE fruits
              SET fruit_name = ?, description = ?, status = ?
              WHERE fruit_id = ?`,
             [fruit_name.trim(), description.trim(), status, id]
@@ -155,7 +155,7 @@ exports.deleteFruit = async (req, res) => {
         }
 
         const [result] = await db.query(
-            'DELETE FROM Fruits WHERE fruit_id = ?',
+            'DELETE FROM fruits WHERE fruit_id = ?',
             [id]
         );
 
